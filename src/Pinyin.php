@@ -1,36 +1,8 @@
 <?php
-/**
-*Chinese characters change to Pinyin class
-* the class can change Chinese characters to Pinyin
-* the encoding of this file is utf8
-* Useage:
-*  <?php 
-*  		require('Pinyin.php');
-*		$PY = new Pinyin();
-*		$pinyin = PY->stringToPinyin('中文');
-*	?>
-*	
-* if you use CakePHP framework to develop web application,
-* you can put the "Pinyin.php" file in the folder "Vendor"
-* you can use it in the controller like this:
-* 	<?php 
-*		class AaController extends AppController{
-*			function a(){
-*				App::import('Vendor','Pinyin');
-*				$PY = new Pinyin();
-*				$pinyin = PY->stringToPinyin('中文');
-*			}
-*		}
-* 	?>
-*
-*
-*/
-class Pinyin{
+namespace NxLib\PinYin;
+class PinYin{
 
-    var $pinyin = array();
-
-    function Pinyin(){
-        $this->pinyin=array(
+    private static $pinyin = array(
         "A"=>array(59371,41648,50400,33157,41392,18661,47599),
         "Ai"=>array(19697,32178,35504,36856,20712,25068,28663,26608,29399,19381,17099,47497,30339,43240,54250,56459,45201,25005,57749,17131,36057,28596,49375,29162,55685,31713,27114,64665,19190,56536,37508,22145,59104,42373,18930,17311,30185,29599,54922,60552,35971,19670,27069,47505,56476,52365,63875,43184,17031,45460,45466,43440,32176,44464,57310,36230,41904,42672,42928,42416,42160,18330,22758,52719,58012,27797,45716,44208,44720,23788,45302,25559,49645,30387,51430,56208,24969,51680,44976,16588,46209,43696,43952,18334,57994,29916,51424,34439),
         "An"=>array(63223,39405,58764,17125,31621,34691,56712,18059,46512,33240,42376,22239,20462,39914,36586,64753,21940,18566,20963,29912,29649,37368,23685,26617,22193,47024,25589,19441,40169,36845,45488,29099,29640,37881,24205,61928,55010,17352,50928,36553,22468,30127,32968,27275,22997,20438,53210,20913,45232,38124,35051,45446,41371,18887,47280,46256,40328,16612,60897,46768,20417,38293,64475,34438,46000,62337,45744,61150,16619,42991),
@@ -538,8 +510,10 @@ class Pinyin{
         "Zui"=>array(21646,25753,29623,27033,61143,60631,37511,29357,60045,30912,35205,57752,24783,60887,39062,37301,61399,59542,36245,21437,17889,26334),
         "Zun"=>array(50322,19159,34531,40895,36089,33255,64909,55273,42207,61911,44791,26503,22263,38394,61655,38592),
         "Zuo"=>array(61932,53739,33225,18050,25788,31432,63191,35536,63959,63703,27065,38882,39606,32182,62167,62423,62679,62860,59610,63447,38591,63116)
-        );
-    }
+    );
+
+    private function __clone(){}
+    private function __construct(){}
     
     /**
      * Chinese characters change to Pinyin
@@ -547,7 +521,7 @@ class Pinyin{
      * @param string $s
      * @return string
      */
-    function stringToPinyin($s){
+    public static function stringToPinyin($s){
         $s=preg_replace("/\s/is","_",$s);
         $pinyin="";
         
@@ -556,7 +530,7 @@ class Pinyin{
 		}
         for($i=0;$i<strlen($s);$i++){
             if(ord($s[$i])>128){
-                $char=$this->asc2ToPinyin(ord($s[$i])+ord($s[$i+1])*256);
+                $char=self::asc2ToPinyin(ord($s[$i])+ord($s[$i+1])*256);
                 $pinyin.=$char;//first letter
                 $i++;
             }else{
@@ -567,8 +541,8 @@ class Pinyin{
         return strtolower($pinyin);
     }
     
-    function asc2ToPinyin($asc2){
-        $pinyin=$this->pinyin;
+    private function asc2ToPinyin($asc2){
+        $pinyin = self::$pinyin;
         foreach($pinyin as $value){
             if(array_search($asc2,$value)===false){
             }else{
