@@ -541,7 +541,7 @@ class PinYin{
         return strtolower($pinyin);
     }
     
-    private function asc2ToPinyin($asc2){
+    private static function asc2ToPinyin($asc2){
         $pinyin = self::$pinyin;
         foreach($pinyin as $value){
             if(array_search($asc2,$value)===false){
