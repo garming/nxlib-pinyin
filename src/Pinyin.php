@@ -540,7 +540,11 @@ class PinYin{
         }
         return strtolower($pinyin);
     }
-    
+
+    /**
+     * @param $asc2
+     * @return mixed
+     */
     private static function asc2ToPinyin($asc2){
         $pinyin = self::$pinyin;
         foreach($pinyin as $value){
